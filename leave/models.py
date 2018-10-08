@@ -56,7 +56,7 @@ class LeavesCount(models.Model):
     remaining_leaves = models.FloatField(default=2.0)
 
     def save(self, *args, **kwargs):
-        if self.year < 2015 or self.remaining_leaves < 2:
+        if self.year < 2015 or self.remaining_leaves < 0:
             raise ValueError('Year must be greater than 2018 and remaining leaves more than 0')
         super(LeavesCount, self).save(*args, **kwargs)
 
@@ -181,3 +181,9 @@ class LeaveMigration(models.Model):
     def __str__(self):
         return '{} : {}, type => {}'.format(self.replacee.username, self.replacer.username,
                                             self.type_migration)
+
+class RestrictedHoliday(models.Model):
+    date = models.DateField()
+
+class ClosedHoliday(models.Model):
+    date = models.DateField()

@@ -41,11 +41,13 @@ def get_user_choices(user):
 
 
 def get_special_leave_count(start, end, leave_name):
-    from applications.academic_information.models import Holiday
-    special_holidays = Holiday.objects.filter(holiday_name=leave_name)
+    #from applications.academic_information.models import Holiday
+    #special_holidays = Holiday.objects.filter(holiday_name=leave_name)
+    from applications.leave.models import RestrictedHoliday
+    special_holidays = RestrictedHoliday.objects.all()
     count = 0.0
     while start <= end:
-        if not special_holidays.filter(holiday_date=start).exists():
+        if not special_holidays.filter(date=start).exists():
             return -1
         count += 1.0
         start = start + datetime.timedelta(days=1)

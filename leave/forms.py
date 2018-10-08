@@ -127,6 +127,11 @@ class LeaveSegmentForm(forms.Form):
                     errors['leave_type'] = [error, ]
 
         elif data['start_date'] == data['end_date']:
+            #if data.get('leave_type')==2:
+            #    restricted_holidays=list(res.date for res in RestrictedHoliday.objects.all())
+            #    print(restricted_holidays)
+            #    print(data.get('start_date'))
+
             if data['start_half'] and data['end_half']:
                 errors['start_half'] = ['Invalid Input']
                 errors['end_half'] = ['Invalid Input']
@@ -142,7 +147,7 @@ class LeaveSegmentForm(forms.Form):
         else:
             errors['start_date'] = ['Start date must not be more than End date.']
 
-        
+
 
 
 

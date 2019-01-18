@@ -187,3 +187,6 @@ class RestrictedHoliday(models.Model):
 
 class ClosedHoliday(models.Model):
     date = models.DateField()
+
+class VacationHoliday(models.Model):
+    date = models.DateField()

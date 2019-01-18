@@ -309,6 +309,7 @@ class BaseLeaveFormSet(BaseFormSet):
                 leave_type = LeaveType.objects.get(id=data.get('leave_type'))
                 #if leave_type.is_station:
                 #    continue
+
                 count = get_leave_days(data.get('start_date'), data.get('end_date'),
                                        leave_type, data.get('start_half'), data.get('end_half'))
 

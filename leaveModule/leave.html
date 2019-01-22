@@ -155,6 +155,11 @@
                             <i class="right floated chevron right icon"></i>
                         </a>
                     {% endif %}
+                    <a class="item" data-tab="fifth">
+                        Leave Manager
+                        <i class="right floated chevron right icon"></i>
+                    </a>
+
                 </div>
                 {% comment %}The Tab-Menu ends here!{% endcomment %}
 
@@ -203,6 +208,19 @@
                     </div>
                 {% endif %}
                 {% comment %}The Approve Leave ends here!{% endcomment %}
+
+
+                {% comment %}The Leave Manager starts here!{% endcomment %}
+                {% if request.user.extrainfo.user_type != 'student' %}
+                    <div class="ui tab segment" data-tab="fifth">
+                        {% block leavemanager %}
+                                {% include 'leaveModule/leavemanager.html' %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
+                {% comment %}The Leave Manager ends here!{% endcomment %}
+
+
 
 
             </div>

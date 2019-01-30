@@ -148,20 +148,24 @@ def restore_leave_balance(leave):
 def deduct_leave_balance(leave):
     to_deduct = get_leaves(leave)
     for key, value in to_deduct.items():
-        count = LeavesCount.objects.get(user=leave.applicant, leave_type=key.leave_type,
-                                        year=key.start_date.year)
-        count.remaining_leaves -= value
-        count.save()
+        
         try:
             if key.leave_type == 'Vacation':
-                count = LeavesCount.objects.get(user=leave.applicant, leave_type__name='Earned',
+                count = LeavesCount.objects.get(user=leave.applicant, leave_type=key.leave_type,
                                                 year=key.start_date.year)
-                count.remaining_leaves -= value / 2
+                #count.remaining_leaves -= value / 2
+                count.remaining_leaves -= value
                 count.save()
             elif key.leave_type == 'Earned':
-                count = LeavesCount.objects.get(user=leave.applicant, leave_type__name='Vacation',
+                count = LeavesCount.objects.get(user=leave.applicant, leave_type=key.leave_type,
                                                 year=key.start_date.year)
-                count.remaining_leaves -= 2.0 * value
+                #count.remaining_leaves -= 2.0 * value
+                count.remaining_leaves -= value
+                count.save()
+            else:
+                count = LeavesCount.objects.get(user=leave.applicant, leave_type=key.leave_type,
+                                        year=key.start_date.year)
+                count.remaining_leaves -= value
                 count.save()
         except:
             pass

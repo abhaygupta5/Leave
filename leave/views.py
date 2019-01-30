@@ -5,17 +5,25 @@ from django.shortcuts import render
 from .handlers import (handle_faculty_leave_application,
                        handle_staff_leave_application,
                        handle_student_leave_application,
+                       handle_offline_leave_application,
                        process_staff_faculty_application,
                        process_student_application, send_faculty_leave_form,
-                       send_staff_leave_form, send_student_leave_form,
+                       send_staff_leave_form, send_student_leave_form, send_offline_leave_form,
                        delete_leave_application)
+
+from .forms import (AcademicReplacementFormOffline, AdminReplacementFormOffline,
+                    EmployeeCommonFormOffline, LeaveSegmentFormOffline )
 
 
 @login_required(login_url='/accounts/login')
 def leave(request):
 
     user_type = request.user.extrainfo.user_type
-
+    user_designation = request.user.holds_designations.get(designation__name='Assistant Registrar')
+    user_designation = str(user_designation).split(' - ')
+    user_designation = user_designation[1]
+    print(user_designation)
+    
     if request.method == 'POST':
 
         response = None
@@ -36,8 +44,36 @@ def leave(request):
     else:
         response = send_student_leave_form(request)
 
+    #response = send_offline_leave_form(request)
+
     return response
 
+@login_required(login_url='/accounts/login')
+def leavemanager(request):
+
+    user_designation = request.user.holds_designations.get(designation__name='Assistant Registrar')
+    user_designation = str(user_designation).split(' - ')
+    print(user_designation)
+    form1 = LeaveSegmentFormOffline()
+    form2 = AcademicReplacementFormOffline()
+    form3 = AdminReplacementFormOffline()
+    form4 = EmployeeCommonFormOffline()
+
+    return render(request, 'leaveModule/test.html', {'leave':form1,
+        'acad':form2,'admin':form3,'common':form4})
+
+    """
+    if request.method == 'POST':
+        response = None
+
+        if user_designation[1] == 'Assistant Registrar':
+            response = handle_offline_leave_application(request)
+        return response
+    if user_designation[1] == 'Assistant Registrar':
+        response = send_offline_leave_form(request)
+    return response"""
+
+    
 
 @login_required(login_url='/accounts/login')
 def process_request(request):

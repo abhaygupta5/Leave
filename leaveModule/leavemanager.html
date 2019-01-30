@@ -1,46 +1,4 @@
-{% load static %}
-
-{% block leavemanager %}
-    <div class="ui vertical segment">
-        <div class="ui header">
-            Leave Status:
-        </div>
-
-        <div class="ui tabular menu">
-            <a class="active item" data-tab="afirst">Faulty</a>
-            <a class="item" data-tab="asecond">Staff</a>
-        </div>
-    </div>
-
-
-
-    <div class="ui bottom attached tab segment active" data-tab="afirst">
-        <div class="ui fluid selection dropdown">
-          <input type="hidden" name="user">
-          <i class="dropdown icon"></i>
-          <div class="default text">Select Faculty</div>
-          <div class="menu">
-            <div class="item" data-value="jenny">
-              Dr. Atul Gupta
-            </div>
-            <div class="item" data-value="elliot">
-              Dr. Manish Kumar Bajpai
-            </div>
-            <div class="item" data-value="stevie">
-              Dr. Preeti Khana
-            </div>
-            <div class="item" data-value="christian">
-              Dr. Kusum Kumari Bharti
-            </div>
-            <div class="item" data-value="matt">
-              Dr. Vinod Kumar Jain
-            </div>
-          </div>
-        </div>
-        <div>
-            <br>
-        </div>
-        {% load semanticui %}
+{% load semanticui %}
         <script>
 
             function Check(e){
@@ -102,18 +60,21 @@
                 }
                 
             </style>
+
+            <div class="ui vertical segment">
+                <div class="ui header">
+                    Leave Manager:
+                </div>
+
+                
+            </div>
             
 
             <div class="ui vertical stripe team segment"
                  style="height: 70vh; padding-left: 3.5%;
                         padding-right: 3.5%; overflow-y: scroll; overflow-x: hidden;">
 
-                <div class="ui header">
-                    Leave Application Form:
-                </div>
-
-                <div class="ui divider"></div>
-                <br>
+                
                 <div class="all-container">
                     <form class="ui large form" method="post" autocomplete="off" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -149,35 +110,7 @@
                                         add(document);
                                         refresh();
                                     };
-                                    $('.leave-form-container-ar').formset({
-                                        formCssClass: "dynamic-leave-form",
-                                        addText: "Add Any Other Leave Type Segment",
-                                        addCssClass: "leave-add-row",
-                                        deleteCssClass: "leave-delete-row",
-                                        deleteText: "Remove Other Leave Type Segment",
-                                        prefix: "{{ leave_form_set.prefix }}",
-                                        added: update,
-                                        // removed: update,
-                                    });
                                     
-                                    $('.acad-form-container-ar').formset({
-                                        formCssClass: "dynamic-acad-form",
-                                        addText: "Add Replacement",
-                                        deleteText: "Remove Replacement",
-                                        addCssClass: "acad-add-row",
-                                        deleteCssClass: "acad-delete-row",
-                                        prefix: "{{ acad_form_set.prefix }}",
-                                        added: update,
-                                    });
-                                    $('.admin-form-container-ar').formset({
-                                        formCssClass: "dynamic-admin-form",
-                                        addText: "Add Replacement",
-                                        deleteText: "Remove Replacement",
-                                        addCssClass: "admin-add-row",
-                                        deleteCssClass: "admin-delete-row",
-                                        prefix: "{{ admin_form_set.prefix }}",
-                                        added: update,
-                                    });
                                 });
                                 $(document).on('click','#leave_next_1', function(e){
                                     e.preventDefault();
@@ -231,8 +164,8 @@
                                 
                             </script>
 
-                                {% if leave_form_set.non_form_errors %}
-                                    {% for error in leave_form_set.non_form_errors %}
+                                {% if leave_form_offline_set.non_form_errors %}
+                                    {% for error in leave_form_offline_set.non_form_errors %}
                                         <div class="ui red message">
                                             {{ error }}
                                         </div>
@@ -264,61 +197,46 @@
                             <div id="leave_form_1">
                                 
 
-                                {% for form in leave_form_set %}
-                                    
-                                    <div id="{{ form.prefix }}-row" class="leave-form-container-ar" style="padding-top:10px;">
-                                        <div class="required field">
-                                            <label for="id_{{ form.prefix }}-leave_type">Leave Type</label>
-                                            <div class="ui selection dropdown">
-                                                <input name="{{ form.prefix }}-leave_type"  value="" type="hidden"></input>
-                                                <i class="dropdown icon"></i>
-                                                <div class="default text">Select</div>
-                                                <div class="menu">
-                                                    {% if acad_form_set %}
-                                                        {% for leave_id,leave_name in form.l_type_fac %}
-                                                            <div class="item" data-value="{{leave_id}}" onclick="return Check(this);">{{leave_name}}</div>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% for leave_id,leave_name in form.l_type_staff %}
-                                                            <div class="item" data-value="{{leave_id}}" onclick="return Check(this);">{{leave_name}}</div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
+                                
+
+                                                                       
+                                    <div id="leave" class="leave-form-container-ar" style="padding-top:10px;">
+                                                                                   
+                                        {{ leave.leave_type }}
+                                           
 
 
-                                        <div class="two fields" style="display: none;align-left: 10px;" id="half-day" >
+                                        <div class="two fields" style="align-left: 10px;" id="half-day" >
                                             <div  >
-                                                {% render_field form.start_half %}
+                                                {{ leave.start_half }}
                                             </div>
                                             <div >
-                                                {% render_field form.end_half %}
+                                                {{ leave.end_half }}
                                             </div>
                                         </div>
 
-                                        <div class="fields" style="display: none;align-left: 10px;">
+                                        <div class="fields" style="align-left: 10px;">
                                             <div class="field">
-                                                {% render_field form.address %}
+                                                {{ leave.address }}
                                             </div>
                                         </div>
 
                                         <div class="two fields" style="align-left: 10px;">
                                             <div class="field">
-                                                    {% render_field form.start_date _icon='calendar' _align='left' placeholder='Click to select date' %}
+                                                    {{ leave.start_date }}
                                             </div>
 
                                             <div class="field">
-                                                    {% render_field form.end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
+                                                    {{ leave.end_date }}
                                             </div>
                                         </div>
                                        
                                         
-                                        {% render_field form.document %}
+                                        {{ leave.document }}
                                         
                                     </div>
                                     
-                                {% endfor %}
+                                
                                 <br>
                                 <div class="button-holder">
                                     <div id="leave_next_1" class="ui primary animated button" tabindex="0">
@@ -333,51 +251,51 @@
                             </div>
                             <div id="replacements_1" hidden>
 
-                                {% if acad_form_set %}
+                                
                                     <div class="ui header">
                                         Academic Responsibilities:
                                     </div>
 
                                     <div id="acad_form">
-                                        {% for form in acad_form_set %}
+                                        
 
-                                            <div id="{{ form.prefix }}-row" class="acad-form-container-ar" style="padding-top:10px;">
+                                            <div id="acad" class="acad-form-container-ar" style="padding-top:10px;">
                                                 <div class="two fields" style="align-left: 10px;">
                                                     <div class="field">
-                                                        {% render_field form.acad_start_date _icon='calendar' _align='left' placeholder='Click to select date'%}
+                                                        {{ acad.acad_start_date }}
                                                     </div>
 
                                                     <div class="field">
-                                                        {% render_field form.acad_end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
+                                                        {{ acad.acad_end_date }}
                                                     </div>
                                                 </div>
-                                                {% render_field form.acad_rep %}
+                                                {{ acad.acad_rep }}
                                             </div>
-                                        {% endfor %}
+                                        
                                     </div>
                                     <hr><hr>
-                                {% endif %}
+                                
                                 <div class="ui header">
                                     Administrative Responsibilities:
                                 </div>
                                 <div id="admin_form">
 
-                                    {% for form in admin_form_set %}
-                                        <div id="{{ form.prefix }}-row" class="admin-form-container-ar" style="padding-top:10px;">
+                                    
+                                        <div id="admin" class="admin-form-container-ar" style="padding-top:10px;">
 
                                             <div class="two fields" style="align-left: 10px;">
                                                 <div class="field">
-                                                    {% render_field form.admin_start_date _icon='calendar' _align='left' placeholder='Click to select date'%}
+                                                    {{ admin.admin_start_date }}
                                                 </div>
 
                                                 <div class="field">
-                                                    {% render_field form.admin_end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
+                                                    {{ admin.admin_end_date }}
                                                 </div>
                                             </div>
-                                            {% render_field form.admin_rep %}
+                                            {{ admin.admin_rep }}
 
                                         </div>
-                                    {% endfor %}
+                                    
                                 </div>
                                 <div class="button-holder">
                                     <span id="rep_pre_1" class="ui primary animated button" tabindex="0">
@@ -396,10 +314,12 @@
 
                             </div>
                             <div id="common_form_1" hidden>
+                                {{ common.leave_user_select }}
+                                {{ common.application_date }}
 
-                                {% render_field common_form.purpose %}
-                                <!--{% render_field common_form.is_station %}-->
-                                {% render_field common_form.leave_info _no_required='True' %}
+                                {{ common.purpose }}
+                                <!--{% render_field common_form.is_station %}
+                                {% render_field common_form.leave_info _no_required='True' %}-->
                                 <span id="common_pre_1" class="primary ui animated button" tabindex="0">
                                     <div class="visible content">Go Back</div>
                                     <div class="hidden content">
@@ -407,9 +327,7 @@
                                     </div>
                                 </span>
 
-                                {{ leave_form_set.management_form }}
-                                {{ admin_form_set.management_form }}
-                                {{ acad_form_set.management_form }}
+                                
 
                                 <button id="submit-btn_1" type="submit" hidden> </button>
                                 <span id="submit_1" class="primary green ui animated button" tabindex="0">
@@ -420,21 +338,7 @@
                                 </span>
                             </div>
 
-                        {% else %}
-                            <div class="two fields" style="align-left: 10px;">
-                                <div class="field">
-                                    {% render_field form.start_date _icon='calendar' _align='left' placeholder='Click to select date' %}
-                                </div>
-
-                                <div class="field">
-                                    {% render_field form.end_date _icon='calendar' _align='left' placeholder='Click to select date' %}
-                                </div>
-                            </div>
-                            {% render_field form.leave_type %}
-                            {% render_field form.document %}
-                            {% render_field form.address %}
-                            {% render_field form.purpose %}
-                            <button type="submit" class="ui primary button"> Submit </button>
+                        
                         {% endif %}
 
                     </form>
@@ -452,446 +356,7 @@
         </div>
 
     </div>  
-    <div class="ui bottom attached tab segment" data-tab="asecond">
-        <div class="ui fluid selection dropdown">
-          <input type="hidden" name="user">
-          <i class="dropdown icon"></i>
-          <div class="default text">Select Staff</div>
-          <div class="menu">
-            <div class="item" data-value="jenny">
-              Jenny Hess
-            </div>
-            <div class="item" data-value="elliot">
-              Elliot Fu
-            </div>
-            <div class="item" data-value="stevie">
-              Stevie Feliciano
-            </div>
-            <div class="item" data-value="christian">
-              Christian
-            </div>
-            <div class="item" data-value="matt">
-              Matt
-            </div>
-            <div class="item" data-value="justen">
-               Justen Kitsune
-            </div>
-          </div>
-        </div>
-        <div><br></div>
-
-        {% load semanticui %}
-        <script>
-
-            function Check(e){
-                             
-                    var userInput=$(e).html();
-                    
-                    if (userInput=="Casual"){
-                        $(e).parent().parent().parent().next().css('display','block');
-                        //document.getElementById("half-day").style.display='block';
-                    }
-                    else{
-                        $(e).parent().parent().parent().next().css('display','none');
-                        //document.getElementById("half-day").style.display = 'none';
-                    }
-
-                    if (userInput=="Station"){
-                        $(e).parent().parent().parent().next().next().css('display','block');
-                    }
-                    else{
-                        $(e).parent().parent().parent().next().next().css('display','none');
-                    }
-                   
-                return false;
-            }
-             
-            
-        </script>
-
-        <div class="ui container">
-            <style media="screen">
-
-                .button-holder{
-                    float: right;
-                }
-
-                .leave-add-row{
-                    border-bottom:1px solid gray;
-                    
-                }
-                .leave-delete-row{
-                    border-bottom:2px solid gray;
-                    
-                }
-                .acad-add-row{
-                    border-bottom:2px solid gray;
-                    
-                }
-                .acad-delete-row{
-                    border-bottom:2px solid gray;
-                    
-                }
-                .admin-add-row{
-                    border-bottom:2px solid gray;
-                    
-                }
-                .admin-delete-row{
-                    border-bottom:2px solid gray;
-                    
-                }
-                
-            </style>
-            
-
-            <div class="ui vertical stripe team segment"
-                 style="height: 70vh; padding-left: 3.5%;
-                        padding-right: 3.5%; overflow-y: scroll; overflow-x: hidden;">
-
-                <div class="ui header">
-                    Leave Application Form:
-                </div>
-
-                <div class="ui divider"></div>
-                <br>
-                <div class="all-container">
-                    <form class="ui large form" method="post" autocomplete="off" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-
-                        {% if request.user.extrainfo.user_type != 'student' %}
-
-                            <script type="text/javascript">
-
-                                $(function(){
-
-                                    var add = function(row){
-                                        $(row).find('.date.calendar').each(function() {
-                                            $(this).calendar({
-                                                type: 'date',
-                                            });
-                                        });
-                                        $(row).find('.dropdown').each(function(i){
-                                            $(this).dropdown('refresh');
-                                        });
-                                    };
-                                    var refresh = function(){
-                                        $(document).find('.date.calendar').each(function() {
-                                            $(this).calendar('refresh');
-                                        });
-                                    };
-
-                                    var update = function(row) {
-                                        // alert(row.html());
-
-                                        add(document);
-                                        refresh();
-                                        add(document);
-                                        refresh();
-                                    };
-                                    $('.leave-form-container-ar-1').formset({
-                                        formCssClass: "dynamic-leave-form",
-                                        addText: "Add Any Other Leave Type Segment",
-                                        addCssClass: "leave-add-row",
-                                        deleteCssClass: "leave-delete-row",
-                                        deleteText: "Remove Other Leave Type Segment",
-                                        prefix: "{{ leave_form_set.prefix }}",
-                                        added: update,
-                                        // removed: update,
-                                    });
-                                    
-                                    $('.acad-form-container-ar-1').formset({
-                                        formCssClass: "dynamic-acad-form",
-                                        addText: "Add Replacement",
-                                        deleteText: "Remove Replacement",
-                                        addCssClass: "acad-add-row",
-                                        deleteCssClass: "acad-delete-row",
-                                        prefix: "{{ acad_form_set.prefix }}",
-                                        added: update,
-                                    });
-                                    $('.admin-form-container-ar-1').formset({
-                                        formCssClass: "dynamic-admin-form",
-                                        addText: "Add Replacement",
-                                        deleteText: "Remove Replacement",
-                                        addCssClass: "admin-add-row",
-                                        deleteCssClass: "admin-delete-row",
-                                        prefix: "{{ admin_form_set.prefix }}",
-                                        added: update,
-                                    });
-                                });
-                                $(document).on('click','#leave_next_2', function(e){
-                                    e.preventDefault();
-                                    // alert("Woah, this worked");
-                                    $("#leave_form_2").fadeOut(function(){
-                                        $("#replacements_2").fadeIn();
-                                        $("#first_2").removeClass('active');      
-                                        $("#first_2").addClass('completed');
-                                        $("#second_2").addClass('active');
-                                    });
-                                });
-                                $(document).on('click','#rep_next_2', function(e){
-                                    e.preventDefault();
-                                    // alert("Woah, this worked");
-                                    $("#replacements_2").fadeOut(function(){
-                                        $("#common_form_2").fadeIn();
-                                        $("#second_2").removeClass('active');     
-                                        $("#second_2").addClass('completed');
-                                        $("#third_2").addClass('active');
-                                    });
-                                });
-
-                                $(document).on('click','#common_pre_2', function(e){
-                                    e.preventDefault();
-                                    // alert("Woah, this worked");
-                                    $("#common_form_2").fadeOut(function(){
-                                        $("#replacements_2").fadeIn();
-                                        $("#third_2").removeClass('active');      
-                                        $("#second_2").removeClass('completed');
-                                        $("#second_2").addClass('active');
-                                    });
-                                });
-
-                                $(document).on('click','#rep_pre_2', function(e){
-                                    e.preventDefault();
-                                    // alert("Woah, this worked");
-                                    $("#replacements_2").fadeOut(function(){
-                                        $("#leave_form_2").fadeIn();
-                                        $("#second_2").removeClass('active');     
-                                        $("#first_2").removeClass('completed');
-                                        $("#first_2").addClass('active');
-                                    });
-                                });
-
-                                $(document).on('click', '#submit_2', function(){
-                                    $('#submit-btn_2').click();
-                                });
+    
 
 
 
-                                
-                            </script>
-
-                                {% if leave_form_set.non_form_errors %}
-                                    {% for error in leave_form_set.non_form_errors %}
-                                        <div class="ui red message">
-                                            {{ error }}
-                                        </div>
-                                    {% endfor %}
-
-                                {% endif %}
-
-                            <div class="ui ordered steps">
-                              <div class="active step" id="first_2">
-                                <div class="content">
-                                  <div class="title">Leave Type</div>
-                                  
-                                </div>
-                              </div>
-                              <div class="step" id="second_2">
-                                <div class="content">
-                                  <div class="title">Responsibility</div>
-                                  
-                                </div>
-                              </div>
-                              <div class="step" id="third_2">
-                                <div class="content">
-                                  <div class="title">Purpose</div>
-                                  
-                                </div>
-                              </div>
-                            </div>
-
-                            <div id="leave_form_2">
-                                
-
-                                {% for form in leave_form_set %}
-                                    
-                                    <div id="{{ form.prefix }}-row" class="leave-form-container-ar1" style="padding-top:10px;">
-                                        <div class="required field">
-                                            <label for="id_{{ form.prefix }}-leave_type">Leave Type</label>
-                                            <div class="ui selection dropdown">
-                                                <input name="{{ form.prefix }}-leave_type"  value="" type="hidden"></input>
-                                                <i class="dropdown icon"></i>
-                                                <div class="default text">Select</div>
-                                                <div class="menu">
-                                                    {% if acad_form_set %}
-                                                        {% for leave_id,leave_name in form.l_type_fac %}
-                                                            <div class="item" data-value="{{leave_id}}" onclick="return Check(this);">{{leave_name}}</div>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% for leave_id,leave_name in form.l_type_staff %}
-                                                            <div class="item" data-value="{{leave_id}}" onclick="return Check(this);">{{leave_name}}</div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="two fields" style="display: none;align-left: 10px;" id="half-day" >
-                                            <div  >
-                                                {% render_field form.start_half %}
-                                            </div>
-                                            <div >
-                                                {% render_field form.end_half %}
-                                            </div>
-                                        </div>
-
-                                        <div class="fields" style="display: none;align-left: 10px;">
-                                            <div class="field">
-                                                {% render_field form.address %}
-                                            </div>
-                                        </div>
-
-                                        <div class="two fields" style="align-left: 10px;">
-                                            <div class="field">
-                                                    {% render_field form.start_date _icon='calendar' _align='left' placeholder='Click to select date' %}
-                                            </div>
-
-                                            <div class="field">
-                                                    {% render_field form.end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
-                                            </div>
-                                        </div>
-                                       
-                                        
-                                        {% render_field form.document %}
-                                        
-                                    </div>
-                                    
-                                {% endfor %}
-                                <br>
-                                <div class="button-holder">
-                                    <div id="leave_next_2" class="ui primary animated button" tabindex="0">
-                                        <div class="visible content">Next</div>
-                                        <div class="hidden content">
-                                            <i class="right arrow icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-
-                            </div>
-                            <div id="replacements_2" hidden>
-
-                                {% if acad_form_set %}
-                                    <div class="ui header">
-                                        Academic Responsibilities:
-                                    </div>
-
-                                    <div id="acad_form">
-                                        {% for form in acad_form_set %}
-
-                                            <div id="{{ form.prefix }}-row" class="acad-form-container-ar1" style="padding-top:10px;">
-                                                <div class="two fields" style="align-left: 10px;">
-                                                    <div class="field">
-                                                        {% render_field form.acad_start_date _icon='calendar' _align='left' placeholder='Click to select date'%}
-                                                    </div>
-
-                                                    <div class="field">
-                                                        {% render_field form.acad_end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
-                                                    </div>
-                                                </div>
-                                                {% render_field form.acad_rep %}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    <hr><hr>
-                                {% endif %}
-                                <div class="ui header">
-                                    Administrative Responsibilities:
-                                </div>
-                                <div id="admin_form">
-
-                                    {% for form in admin_form_set %}
-                                        <div id="{{ form.prefix }}-row" class="admin-form-container-ar1" style="padding-top:10px;">
-
-                                            <div class="two fields" style="align-left: 10px;">
-                                                <div class="field">
-                                                    {% render_field form.admin_start_date _icon='calendar' _align='left' placeholder='Click to select date'%}
-                                                </div>
-
-                                                <div class="field">
-                                                    {% render_field form.admin_end_date _icon='calendar' _align='left' placeholder='Click to select date'%}
-                                                </div>
-                                            </div>
-                                            {% render_field form.admin_rep %}
-
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="button-holder">
-                                    <span id="rep_pre_2" class="ui primary animated button" tabindex="0">
-                                        <div class="visible content">Back</div>
-                                        <div class="hidden content">
-                                            <i class="white left arrow icon"></i>
-                                        </div>
-                                    </span>
-                                    <span id="rep_next_2" class="ui primary animated button" tabindex="0">
-                                        <div class="visible content">Next</div>
-                                        <div class="hidden content">
-                                            <i class="white right arrow icon"></i>
-                                        </div>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div id="common_form_2" hidden>
-
-                                {% render_field common_form.purpose %}
-                                <!--{% render_field common_form.is_station %}-->
-                                {% render_field common_form.leave_info _no_required='True' %}
-                                <span id="common_pre_2" class="primary ui animated button" tabindex="0">
-                                    <div class="visible content">Go Back</div>
-                                    <div class="hidden content">
-                                        <i class="white left arrow icon"></i>
-                                    </div>
-                                </span>
-
-                                {{ leave_form_set.management_form }}
-                                {{ admin_form_set.management_form }}
-                                {{ acad_form_set.management_form }}
-
-                                <button id="submit-btn_2" type="submit" hidden> </button>
-                                <span id="submit_2" class="primary green ui animated button" tabindex="0">
-                                    <div class="visible content">Submit</div>
-                                    <div class="hidden content">
-                                        <i class="white right arrow icon"></i>
-                                    </div>
-                                </span>
-                            </div>
-
-                        {% else %}
-                            <div class="two fields" style="align-left: 10px;">
-                                <div class="field">
-                                    {% render_field form.start_date _icon='calendar' _align='left' placeholder='Click to select date' %}
-                                </div>
-
-                                <div class="field">
-                                    {% render_field form.end_date _icon='calendar' _align='left' placeholder='Click to select date' %}
-                                </div>
-                            </div>
-                            {% render_field form.leave_type %}
-                            {% render_field form.document %}
-                            {% render_field form.address %}
-                            {% render_field form.purpose %}
-                            <button type="submit" class="ui primary button"> Submit </button>
-                        {% endif %}
-
-                    </form>
-                </div>
-
-            </div>
-
-            <div class="extra content">
-                <br>
-                <br>
-
-
-            </div>
-
-        </div>
-
-    </div> 
-
-
-{%  endblock %}

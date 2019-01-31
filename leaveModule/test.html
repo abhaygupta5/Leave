@@ -141,14 +141,14 @@
                      style="min-width: 240px;
                             max-width: 320px;">
                     <a class="active item" data-tab="first">
-                        Leave Application
+                        Leave Manager
                         <i class="right floated chevron right icon"></i>
                     </a>
 
                     
                     
                         <a class="item" data-tab="fifth">
-                            Leave Manager
+                            Leave Application
                             <i class="right floated chevron right icon"></i>
                         </a>
                     
@@ -166,23 +166,24 @@
         <div class="eight wide column">
             <div class="row">
 
+                {% comment %}The Leave Manager starts here!{% endcomment %}
+                {% if request.user.extrainfo.user_type != 'student' %}
+                    <div class="ui active tab segment" data-tab="first">
+                        {% block leavemanager %}
+                                {% include 'leaveModule/leavemanager1.html' %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
+                {% comment %}The Leave Manager ends here!{% endcomment %}
+
                 {% comment %}The Leave Application Form starts here!{% endcomment %}
-                <div class="ui active tab segment" data-tab="first">
-                    Hello
+                <div class="ui tab segment" data-tab="fifth">
+                    <a href="{% url 'leave:leave' %}">Go to Leave Page</a>
                 </div>
                 {% comment %}The Leave Application Form ends here!{% endcomment %}
 
                 
 
-                {% comment %}The Leave Manager starts here!{% endcomment %}
-                {% if request.user.extrainfo.user_type != 'student' %}
-                    <div class="ui tab segment" data-tab="fifth">
-                        {% block leavemanager %}
-                                {% include 'leaveModule/leavemanager.html' %}
-                        {% endblock %}
-                    </div>
-                {% endif %}
-                {% comment %}The Leave Manager ends here!{% endcomment %}
 
 
 

@@ -542,11 +542,11 @@ class AcademicReplacementFormOffline(forms.Form):
 
 class BaseLeaveFormSetOffline(BaseFormSet):
 
-    def __init__(self, *args, **kwargs):
+    """def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
             self.user = kwargs.pop('user')
         
-        super(BaseLeaveFormSetOffline, self).__init__(*args, **kwargs)
+        super(BaseLeaveFormSetOffline, self).__init__(*args, **kwargs)"""
 
     def clean(self):
         super(BaseLeaveFormSetOffline, self).clean()

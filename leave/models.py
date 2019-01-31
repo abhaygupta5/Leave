@@ -205,6 +205,9 @@ class LeaveOffline(models.Model):
         balances = self.applicant.leave_balance.filter(year=curr_year)
         return balances
 
+    def generate_requests(self):
+        pass
+
     def __str__(self):
         return '{} applied, status: {}'.format(self.applicant.username,
                                                'succeed')

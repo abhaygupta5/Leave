@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.shortcuts import render
 
+from applications.globals.models import HoldsDesignation, Designation
+
 from .handlers import (handle_faculty_leave_application,
                        handle_staff_leave_application,
                        handle_student_leave_application,
@@ -19,10 +21,7 @@ from .forms import (AcademicReplacementFormOffline, AdminReplacementFormOffline,
 def leave(request):
 
     user_type = request.user.extrainfo.user_type
-    user_designation = request.user.holds_designations.get(designation__name='Assistant Registrar')
-    user_designation = str(user_designation).split(' - ')
-    user_designation = user_designation[1]
-    print(user_designation)
+    
     
     if request.method == 'POST':
 
@@ -51,27 +50,39 @@ def leave(request):
 @login_required(login_url='/accounts/login')
 def leavemanager(request):
 
-    user_designation = request.user.holds_designations.get(designation__name='Assistant Registrar')
-    user_designation = str(user_designation).split(' - ')
-    print(user_designation)
-    form1 = LeaveSegmentFormOffline()
+    #user_designation = request.user.holds_designations.get(designation__name='Assistant Registrar')
+    #user_designation = str(user_designation).split(' - ')
+    desig = list(HoldsDesignation.objects.all().filter(working = request.user).values_list('designation'))
+    b = [i for sub in desig for i in sub]
+    c=False
+    for i in b:
+        if str(Designation.objects.get(id=i))=='Assistant Registrar':
+            c=True
+            break
+
+    
+    if request.method == 'POST':
+        response = None
+
+        if c:
+            response = handle_offline_leave_application(request)
+        return response
+
+    if c:
+        return send_offline_leave_form(request)
+    
+    #print(c)
+    """form1 = LeaveSegmentFormOffline()
     form2 = AcademicReplacementFormOffline()
     form3 = AdminReplacementFormOffline()
     form4 = EmployeeCommonFormOffline()
 
     return render(request, 'leaveModule/test.html', {'leave':form1,
-        'acad':form2,'admin':form3,'common':form4})
+        'acad':form2,'admin':form3,'common':form4})"""
+    
+    
 
-    """
-    if request.method == 'POST':
-        response = None
-
-        if user_designation[1] == 'Assistant Registrar':
-            response = handle_offline_leave_application(request)
-        return response
-    if user_designation[1] == 'Assistant Registrar':
-        response = send_offline_leave_form(request)
-    return response"""
+    
 
     
 
@@ -107,6 +118,18 @@ def generate_form(request):
     leave = request.user.all_leaves.filter(id=id)
     if leave:
         response = render(request, 'leaveModule/generate_form.html', {'leave': leave.first()})
+    else:
+        response = HttpResponseForbidden()
+
+    return response
+
+@login_required(login_url='/accounts/login')
+def generate_form_offline(request):
+    id = request.GET.get('id')
+    leave = request.user.all_leaves_offline.filter(id=id)
+    print("hello")
+    if leave:
+        response = render(request, 'leaveModule/generate_form_offline.html', {'leave': leave.first()})
     else:
         response = HttpResponseForbidden()
 
